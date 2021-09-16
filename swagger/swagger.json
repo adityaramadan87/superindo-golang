@@ -1,0 +1,443 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Superindo API",
+        "description": "superindo api testing",
+        "version": "1.0.0",
+        "termsOfService": "http://beego.me/",
+        "contact": {
+            "email": "rizkyadytia87@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+    },
+    "host": "localhost:8080",
+    "basePath": "/api",
+    "paths": {
+        "/users/register" : {
+            "post": {
+                "summary": "Register",
+                "tags": ["User"],
+                "description": "Make new user",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "description": "Name of user",
+                        "in": "formData",
+                        "type": "string"
+                    },
+                    {
+                        "name": "phone",
+                        "description": "Phone of user",
+                        "in": "formData",
+                        "type": "string"
+                    },
+                    {
+                        "name": "password",
+                        "description": "Password of user",
+                        "in": "formData",
+                        "type": "string"
+                    },
+                    {
+                        "name": "email",
+                        "description": "email of user",
+                        "in": "formData",
+                        "type": "string"
+                    },
+                    {
+                        "name": "email",
+                        "description": "email of user",
+                        "in": "formData",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200" : {
+                        "description": "Success Register",
+                        "schema": {
+                            "properties": {
+                                "rc" : {
+                                    "type": "integer"
+                                },
+                                "message" : {
+                                    "type": "string"
+                                },
+                                "data" : {
+                                    "type": "array",
+                                    "xml": {
+                                        "name": "auctionItem",
+                                        "wrapped": true
+                                    },
+                                    "items": {
+                                        "type": "object",
+                                        "$ref": "#/definitions/models.User"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400" : {
+                        "description": "Failed Register"
+                    }
+                }
+            }
+        },
+        "/users/login" : {
+            "post": {
+                "summary": "Login",
+                "tags": ["User"],
+                "description": "Login User",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "email",
+                        "description": "Email of user",
+                        "in": "formData",
+                        "type": "string"
+                    },
+                    {
+                        "name": "password",
+                        "description": "Password of user",
+                        "in": "formData",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200" : {
+                        "description": "Success Login",
+                        "schema": {
+                            "properties": {
+                                "rc": {
+                                    "type": "integer"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "null"
+                                }
+                            }
+                        }
+                    },
+                    "400" : {
+                        "description": "Failed Login"
+                    }
+                }
+            }
+        },
+        "/v1/users/update" : {
+            "post": {
+                "summary": "Update User",
+                "description": "Update data user",
+                "tags": ["User"],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Authorization Header",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "id",
+                        "description": "ID of user",
+                        "in": "formData",
+                        "type": "integer",
+                        "required": true
+                    },
+                    {
+                        "name": "avatar",
+                        "description": "Avatar of user",
+                        "in": "formData",
+                        "type": "string",
+                        "required": false
+                    },
+                    {
+                        "name": "email",
+                        "description": "Email of user",
+                        "in": "formData",
+                        "type": "string",
+                        "required": false
+                    },
+                    {
+                        "name": "name",
+                        "description": "Name of user",
+                        "in": "formData",
+                        "type": "string",
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "200" : {
+                        "description": "Success Register",
+                        "schema": {
+                            "properties": {
+                                "rc" : {
+                                    "type": "integer"
+                                },
+                                "message" : {
+                                    "type": "string"
+                                },
+                                "data" : {
+                                    "type": "array",
+                                    "xml": {
+                                        "name": "auctionItem",
+                                        "wrapped": true
+                                    },
+                                    "items": {
+                                        "type": "object",
+                                        "$ref": "#/definitions/models.User"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400" : {
+                        "description": "Failed Register"
+                    }
+                }
+            }
+        },
+        "/v1/products" : {
+            "get": {
+                "tags": ["Products"],
+                "summary": "Get All Product",
+                "description": "Get All Product",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Authorization Header",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200" : {
+                        "description": "Success Response",
+                        "schema": {
+                            "properties": {
+                                "rc" : {
+                                    "type": "integer"
+                                },
+                                "message" : {
+                                    "type": "string"
+                                },
+                                "data" : {
+                                    "type": "array",
+                                    "xml": {
+                                        "name": "productsItem",
+                                        "wrapped": true
+                                    },
+                                    "items": {
+                                        "type": "object",
+                                        "$ref": "#/definitions/models.ProductsItem"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404" : {
+                        "description": "Failed response"
+                    },
+                    "403" : {
+                        "description": "Need Authorization Header"
+                    }
+                }
+            }
+        },
+        "/v1/products/add" : {
+            "post": {
+                "summary": "Add Products",
+                "tags": ["Products"],
+                "description": "Add New Products",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Authorization Header",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "picture",
+                        "description": "Picture of item",
+                        "in": "formData",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "price",
+                        "description": "Price of Product",
+                        "in": "formData",
+                        "type": "number",
+                        "required": true
+                    },
+                    {
+                        "name": "stock_condition",
+                        "description": "Condition stock of Product",
+                        "in": "formData",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "description",
+                        "description": "Description of Product",
+                        "in": "formData",
+                        "type": "string",
+                        "required": false
+                    },
+                    {
+                        "name": "item_name",
+                        "description": "Item name of Product",
+                        "in": "formData",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "id_seller",
+                        "description": "User id who enters Product",
+                        "in": "formData",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "stock",
+                        "description": "Stock of Product",
+                        "in": "formData",
+                        "type": "number",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200" : {
+                        "description": "Success Response",
+                        "schema": {
+                            "properties": {
+                                "rc" : {
+                                    "type": "integer"
+                                },
+                                "message" : {
+                                    "type": "string"
+                                },
+                                "data" : {
+                                    "type": "null"
+                                }
+                            }
+                        }
+                    },
+                    "400" : {
+                        "description": "Failed Response"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "BaseResponse" : {
+            "title": "BaseResponse",
+            "type": "object",
+            "properties": {
+                "rc": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "data" : {
+                    "type": "object"
+                }
+            }
+        },
+        "models.User" : {
+            "title": "User",
+            "type": "object",
+            "properties": {
+                "id" : {
+                    "type": "integer"
+                },
+                "name" : {
+                    "type": "string"
+                },
+                "email" : {
+                    "type": "string"
+                },
+                "phone" : {
+                    "type": "string"
+                },
+                "password" : {
+                    "type": "string"
+                },
+                "verified" : {
+                    "type": "boolean"
+                },
+                "ktp" : {
+                    "type": "string"
+                },
+                "create_date" : {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "verified_date" : {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "birth_date" : {
+                    "type": "string"
+                }
+            }
+        },
+        "models.ProductsItem": {
+            "title": "ProductsItem",
+            "type": "object",
+            "properties": {
+                "price": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "item_name": {
+                    "type": "string"
+                },
+                "update_at": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "id": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "id_seller": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "picture": {
+                    "type": "string"
+                },
+                "create_at": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "stock": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "stock_condition": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

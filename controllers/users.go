@@ -46,7 +46,7 @@ func (u *UsersController) Register() {
 
 func (u *UsersController) Login() {
 	var users models.S_user
-	json.Unmarshal(u.Ctx.Input.RequestBody, users)
+	json.Unmarshal(u.Ctx.Input.RequestBody, &users)
 	//
 	u.Ctx.Input.Bind(&users.Email, "email")
 	u.Ctx.Input.Bind(&users.Password, "password")
@@ -59,6 +59,13 @@ func (u *UsersController) Login() {
 	rc, msg, ss := models.LoginUser(users.Email, users.Password)
 
 	helper.Response(rc, msg, ss, u.Controller)
+}
+
+func (u *UsersController) VerifyOtp() {
+	phoneNumber := u.GetString("phone_number")
+
+	rc, msg := models.UserPhoneVerification(phoneNumber)
+	helper.Response(rc, msg, nil, u.Controller)
 }
 
 func (u *UsersController) Update() {

@@ -37,6 +37,7 @@ func init() {
 	nameSpace := beego.NewNamespace("/api",
 		beego.NSRouter("/users/login", &controllers.UsersController{}, "post:Login"),
 		beego.NSRouter("/users/register", &controllers.UsersController{}, "post:Register"),
+		beego.NSRouter("/users/otp", &controllers.UsersController{}, "get:VerifyOtp"),
 
 		beego.NSNamespace("/v1",
 			beego.NSBefore(authFilter),

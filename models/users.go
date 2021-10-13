@@ -1,11 +1,16 @@
 package models
 
 import (
+	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
 	"strconv"
 
+	"superindo_backend/helper"
+
 	"github.com/beego/beego/v2/client/orm"
+	"github.com/go-resty/resty/v2"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -29,8 +34,20 @@ type UserAvatar struct {
 	UserId int    `json:"user_id"`
 }
 
+type UserOtp struct {
+	Id        int    `json:"id"`
+	OtpNumber string `json:"otp_number"`
+}
+
+type MessageData struct {
+	To      string            `json:"to"`
+	From    string            `json:"from"`
+	Type    string            `json:"type"`
+	Content map[string]string `json:"content"`
+}
+
 func init() {
-	orm.RegisterModel(new(S_user), new(UserAvatar))
+	orm.RegisterModel(new(S_user), new(UserAvatar), new(UserOtp))
 }
 
 func Register(u S_user) (us *S_user, msg string, rc int) {
@@ -89,6 +106,65 @@ func LoginUser(email string, password string) (rc int, msg string, ss *Session) 
 		}
 	}
 
+}
+
+func UserPhoneVerification(phoneNumber string) (rc int, msg string) {
+	o := orm.NewOrm()
+
+	phoneNmbr, _ := strconv.Atoi(phoneNumber)
+
+	otp := helper.EncodeToString(6)
+
+	var userOtp UserOtp
+	o.Raw("SELECT * FROM user_otp WHERE otp_number = ?", otp).QueryRow(&userOtp)
+	if userOtp != (UserOtp{}) {
+		fmt.Println("Same Otp : ", otp)
+		UserPhoneVerification(phoneNumber)
+	}
+
+	data := MessageData{
+		To:   "+62" + strconv.Itoa(phoneNmbr),
+		From: "36ac2e2092b84ae2a081d86acd83ffc6",
+		Type: "text",
+		Content: map[string]string{
+			"text": "Hallo berhasil hit api otp : " + otp,
+		},
+	}
+
+	client := resty.New()
+
+	if _, err := o.Insert(&UserOtp{
+		OtpNumber: otp,
+	}); err != nil {
+		fmt.Println(err.Error())
+
+		return 1, "Error while insert otp"
+	}
+
+	response, err := client.R().
+		SetHeaders(map[string]string{
+			"Authorization": "AccessKey YOUR_API_KEY",
+			"Content-Type":  "application/json",
+		}).
+		SetBody(&data).
+		Post("https://conversations.messagebird.com/v1/send")
+
+	if err != nil {
+		log.Print(errors.New("Error while send otp " + err.Error()))
+		return 1, "error while send Otp"
+	} else {
+		fmt.Println(response, err)
+		if response.StatusCode() == 202 {
+			var marshal map[string]interface{}
+
+			json.Unmarshal(response.Body(), &marshal)
+			fmt.Println("ID : ", marshal["id"])
+
+			return 0, "Success"
+		}
+
+		return 1, "Failed Status Code : " + strconv.Itoa(response.StatusCode())
+	}
 }
 
 func UserById(userId int) (rc int, msg string, su *S_user) {

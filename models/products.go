@@ -11,7 +11,7 @@ import (
 type ProductsItem struct {
 	Id             int       `json:"id"`
 	Picture        string    `json:"picture"`
-	Stock          string    `json:"Stock"`
+	Stock          int       `json:"Stock"`
 	StockCondition string    `json:"stock_condition"`
 	Description    string    `json:"description"`
 	IdSeller       int       `json:"id_seller"`
@@ -119,7 +119,7 @@ func GetAllProduct() (rc int, msg string, data []ProductsItem) {
 	o := orm.NewOrm()
 
 	_, err := o.Raw(
-		"SELECT * FROM products_item ORDER BY create_at DESC").QueryRows(&data)
+		"SELECT * FROM products_item WHERE stock > 2 ORDER BY create_at DESC").QueryRows(&data)
 
 	if err != nil {
 		log.Print(err.Error())
